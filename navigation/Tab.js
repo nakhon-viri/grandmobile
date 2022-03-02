@@ -9,7 +9,7 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        headerShown: false,
+        // headerShown: false,
         tabBarStyle: [
           {
             position: 'absolute',
@@ -48,6 +48,7 @@ const Tabs = () => {
         name="history"
         component={Order}
         options={{
+          headerTitle: 'ประวัติการทำงาน',
           tabBarLabel: 'ประวัติการทำงาน',
         }}
       />
