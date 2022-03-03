@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
-import {Order} from '../screens';
+import {Order, Profile} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +31,8 @@ const Tabs = () => {
             return <Icon name="history" size={size} color={color} />;
           } else if (route.name === 'revenue') {
             return <Icon name="hand-holding-usd" size={size} color={color} />;
+          } else if (route.name === 'profile') {
+            return <Icon name="user-alt" size={size} color={color} />;
           }
         },
         tabBarInactiveTintColor: 'gray',
@@ -40,7 +42,7 @@ const Tabs = () => {
         name="order"
         component={Order}
         options={{
-          tabBarLabel: 'งานที่กำลังทำ',
+          tabBarLabel: 'ล่าสุด',
         }}
         // options={{tabBarBadge: 3}}
       />
@@ -49,14 +51,25 @@ const Tabs = () => {
         component={Order}
         options={{
           headerTitle: 'ประวัติการทำงาน',
-          tabBarLabel: 'ประวัติการทำงาน',
+          tabBarLabel: 'ประวัติงาน',
+          headerTitleStyle: {
+            fontFamily: 'Kanit-Light',
+          },
         }}
       />
       <Tab.Screen
         name="revenue"
         component={Order}
         options={{
-          tabBarLabel: 'ประวัติการทำงาน',
+          tabBarLabel: 'รายการ',
+        }}
+      />
+      <Tab.Screen
+        name="profile"
+        component={Profile}
+        options={{
+          headerTitle: 'ฉัน',
+          tabBarLabel: 'ฉัน',
         }}
       />
     </Tab.Navigator>
