@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/dist/FontAwesome5';
-import {Order, Profile} from '../screens';
+import {Order, Profile, Home, Financial} from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -9,7 +9,6 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        // headerShown: false,
         tabBarStyle: [
           {
             position: 'absolute',
@@ -19,11 +18,19 @@ const Tabs = () => {
             paddingTop: 10,
             borderTopColor: 'transparent',
             backgroundColor: '#fff',
-            // elevation: 0,
             height: 90,
           },
           null,
         ],
+        tabBarLabelStyle: {
+          left: 0,
+          bottom: 8,
+          right: 0,
+        },
+        tabBarIconStyle: {
+          padding: 0,
+          marginBottom: 10,
+        },
         tabBarIcon: ({color, size}) => {
           if (route.name === 'order') {
             return <Icon name="truck" size={size} color={color} />;
@@ -37,14 +44,23 @@ const Tabs = () => {
         },
         tabBarInactiveTintColor: 'gray',
         tabBarActiveTintColor: '#1a73e8',
+        unmountOnBlur: true,
       })}>
       <Tab.Screen
         name="order"
-        component={Order}
-        options={{
-          tabBarLabel: 'ล่าสุด',
-        }}
         // options={{tabBarBadge: 3}}
+        component={Home}
+        options={{
+          headerTitle: 'วันนี้',
+          tabBarLabel: 'วันนี้',
+          headerTitleStyle: {
+            fontFamily: 'Kanit-Light',
+          },
+          headerStyle: {
+            borderBottomWidth: 0.2,
+          },
+          headerTitleAlign: 'center',
+        }}
       />
       <Tab.Screen
         name="history"
@@ -55,13 +71,25 @@ const Tabs = () => {
           headerTitleStyle: {
             fontFamily: 'Kanit-Light',
           },
+          headerStyle: {
+            borderBottomWidth: 0.2,
+          },
+          headerTitleAlign: 'center',
         }}
       />
       <Tab.Screen
         name="revenue"
-        component={Order}
+        component={Financial}
         options={{
-          tabBarLabel: 'รายการ',
+          headerTitle: 'การเงิน',
+          tabBarLabel: 'การเงิน',
+          headerTitleStyle: {
+            fontFamily: 'Kanit-Light',
+          },
+          headerStyle: {
+            borderBottomWidth: 0.2,
+          },
+          headerTitleAlign: 'center',
         }}
       />
       <Tab.Screen
@@ -70,6 +98,13 @@ const Tabs = () => {
         options={{
           headerTitle: 'ฉัน',
           tabBarLabel: 'ฉัน',
+          headerTitleStyle: {
+            fontFamily: 'Kanit-Light',
+          },
+          headerStyle: {
+            borderBottomWidth: 0.2,
+          },
+          headerTitleAlign: 'center',
         }}
       />
     </Tab.Navigator>

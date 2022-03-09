@@ -6,21 +6,41 @@ import * as Keychain from 'react-native-keychain';
 import Tabs from './navigation/Tab';
 import {StoreContext} from './store';
 import {httpClient} from './utils/HttpClient';
-import {Login} from './screens';
+import {Login, OrderDetail} from './screens';
+// import io from 'socket.io-client';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   const {
     auth: {isLogin, upDateLogin},
-    userStore: {upDateProfile},
-    orderStore: {uoDateOrder},
+    userStore: {profile, upDateProfile},
+    orderStore: {order, upDateOrder},
   } = useContext(StoreContext);
 
-  useEffect(async () => {
+  // useEffect(() => {
+  //   const newSocket = io('http://localhost:2200');
+  //   newSocket.emit('addUser', profile?._id);
+  //   newSocket.on('arrayValue', data => {
+  //     // console.log(data);
+  //     // upDateOrder([...order, data]);
+  //     httpClient
+  //       .get('http://192.168.1.20:2200/order/mobile')
+  //       .then(res => {
+  //         upDateOrder(res.data.data);
+  //       })
+  //       .catch(err => {
+  //         console.log(err.response);
+  //       });
+  //   });
+
+  //   return () => newSocket.close();
+  // }, [profile]);
+
+  useEffect(() => {
     const getProfile = () => {
       httpClient
-        .get('http://localhost:2200/personnel/me')
+        .get('http://192.168.1.20:2200/personnel/me')
         .then(res => {
           upDateProfile(res.data);
           upDateLogin(true);
@@ -32,32 +52,61 @@ const App = () => {
 
     const getOrder = () => {
       httpClient
-        .get('http://localhost:2200/order/mobile')
+        .get('http://192.168.1.20:2200/order/mobile')
         .then(res => {
-          uoDateOrder(res.data.data);
+          upDateOrder(res.data.data);
         })
         .catch(err => {
           console.log(err.response);
         });
     };
 
-    const credentials = await Keychain.getGenericPassword();
-    if (credentials.password) {
-      getProfile();
-      getOrder();
-    }
+    const getData = async () => {
+      const credentials = await Keychain.getGenericPassword();
+      if (credentials.password) {
+        getProfile();
+        getOrder();
+      } else {
+        upDateLogin(false);
+        upDateOrder(null);
+        upDateProfile(null);
+      }
+    };
+
+    getData();
     SplashScreen.hide();
   }, []);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName={'App'}>
+      <Stack.Navigator>
         {isLogin ? (
-          <Stack.Screen name="App" component={Tabs} />
+          <>
+            <Stack.Screen
+              name="App"
+              component={Tabs}
+              options={{
+                tabBarLabel: 'วันนี้',
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="OrderDetail"
+              component={OrderDetail}
+              options={{
+                headerTitle: 'รายละเอียด',
+                headerTitleStyle: {
+                  fontFamily: 'Kanit-Regular',
+                  color: '#000',
+                },
+                headerStyle: {
+                  borderBottomWidth: 0.2,
+                },
+                headerTitleAlign: 'center',
+                headerBackTitleVisible: false,
+              }}
+            />
+          </>
         ) : (
           <Stack.Screen name="Login" component={Login} />
         )}

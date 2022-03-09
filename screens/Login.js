@@ -15,22 +15,25 @@ const loginValidationSchema = yup.object().shape({
 });
 
 const Login = () => {
+  console.log('this is login screen!!');
   const {
     userStore: {upDateProfile},
     auth: {upDateLogin},
+    orderStore: {upDateOrder},
   } = useContext(StoreContext);
 
   const handleLogin = value => {
     const nametoken = 'token';
     axios
-      .post('http://localhost:2200/personnel/loginmobile', value)
+      .post('http://192.168.1.20:2200/personnel/loginmobile', value)
       .then(async res => {
         upDateProfile(res.data.user);
         await Keychain.setGenericPassword(nametoken, res.data.accessToken);
+        upDateOrder(res.data.emp);
         upDateLogin(true);
       })
       .catch(err => {
-        console.log(err.response);
+        console.log('err', err.response);
       });
   };
 

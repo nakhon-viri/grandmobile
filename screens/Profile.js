@@ -7,10 +7,14 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome5';
 import Mc, {
   Button,
 } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import * as Keychain from 'react-native-keychain';
 
 const Profile = () => {
+  console.log('Profile');
   const {
-    userStore: {profile},
+    userStore: {profile, upDateProfile},
+    auth: {upDateLogin},
+    orderStore: {upDateOrder},
   } = useContext(StoreContext);
 
   const TextDetail = ({children}) => {
@@ -25,11 +29,14 @@ const Profile = () => {
     );
   };
 
-  const logOut = () => {
-    console.log('logout');
+  const logOut = async () => {
+    await Keychain.resetGenericPassword();
+    upDateOrder(null);
+    upDateProfile(null);
+    upDateLogin(false);
   };
 
-  const date = profile.birthday.split('T')[0].split('-');
+  const date = profile?.birthday.split('T')[0].split('-') || ['', '', ''];
 
   return (
     <ScrollView>
@@ -39,27 +46,27 @@ const Profile = () => {
             <Image
               style={styles.img}
               source={{
-                uri: profile.photo,
+                uri: profile?.photo,
               }}
             />
           </View>
           <View style={styles.detailUser}>
             <Text style={{fontSize: 17}}>
-              {profile.full_name.first_name +
+              {profile?.full_name.first_name +
                 '   ' +
-                profile.full_name.last_name}
+                profile?.full_name.last_name}
             </Text>
             <TextDetail>
               <Icon name="id-card-alt" size={12} color="#999" />
-              {'   ' + profile._uid}
+              {'   ' + profile?._uid}
             </TextDetail>
             <TextDetail>
               <Io name="ios-call" size={12} color="#999" />
-              {'   ' + profile.phone_no}
+              {'   ' + profile?.phone_no}
             </TextDetail>
             <TextDetail>
               <Fa name="automobile" size={12} color="#999" />
-              {'   ' + profile.car_no}
+              {'   ' + profile?.car_no}
             </TextDetail>
           </View>
         </View>
@@ -67,8 +74,8 @@ const Profile = () => {
           <Fa name="id-card-o" size={25} color="#444" />
           <View style={styles.profileDetail}>
             <Text style={{fontSize: 17}}>ข้อมูลส่วนตัว</Text>
-            <Pd>เลขที่ประจำตัวประชาชน : {profile.reference_id}</Pd>
-            <Pd>เพศ : {profile.gender}</Pd>
+            <Pd>เลขที่ประจำตัวประชาชน : {profile?.reference_id}</Pd>
+            <Pd>เพศ : {profile?.gender}</Pd>
             <Pd>
               วัน/เดือน/ปีเกิด : {date[2] + '/' + date[1] + '/' + date[0]}
             </Pd>
@@ -82,17 +89,17 @@ const Profile = () => {
           <View style={styles.addressDetail}>
             <Text style={{fontSize: 17, marginBottom: 10}}>ที่อยู่</Text>
             <Text style={{color: '#4b5257'}}>
-              {profile.address.house_no +
+              {profile?.address.house_no +
                 ' ' +
-                profile.address.street +
+                profile?.address.street +
                 ' ตำบล' +
-                profile.address.subdistrict +
+                profile?.address.subdistrict +
                 ' อำเภอ' +
-                profile.address.district +
+                profile?.address.district +
                 ' จังหวัด' +
-                profile.address.province +
+                profile?.address.province +
                 ' ' +
-                profile.address.zip_code}
+                profile?.address.zip_code}
             </Text>
           </View>
         </View>
@@ -101,7 +108,7 @@ const Profile = () => {
           <View style={styles.profileDetail}>
             <Text style={{fontSize: 17}}>ข้อมูลที่ทำงาน</Text>
             <Text style={{paddingTop: 10, color: '#4b5257'}}>
-              แผนก : {profile.department}
+              แผนก : {profile?.department}
             </Text>
           </View>
         </View>
@@ -109,9 +116,9 @@ const Profile = () => {
           <Mc name="finance" size={25} color="#444" />
           <View style={styles.profileDetail}>
             <Text style={{fontSize: 17}}>ข้อมูลการเงิน</Text>
-            <Pd>ชื่อธนาคาร : {profile.bank_name}</Pd>
+            <Pd>ชื่อธนาคาร : {profile?.bank_name}</Pd>
             <Text style={{paddingTop: 10, color: '#4b5257'}}>
-              เลขที่บัญชี : {profile.bank_no}
+              เลขที่บัญชี : {profile?.bank_no}
             </Text>
           </View>
         </View>

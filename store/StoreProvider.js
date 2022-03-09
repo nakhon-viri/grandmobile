@@ -14,7 +14,7 @@ export const StoreProvider = ({children}) => {
 
   const orderStore = {
     order,
-    uoDateOrder: order => setOrder(order),
+    upDateOrder: order => setOrder(order),
   };
 
   const userStore = {
