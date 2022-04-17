@@ -9,6 +9,7 @@ import React, {useContext} from 'react';
 import {StoreContext} from '../store';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Oc from 'react-native-vector-icons/dist/Octicons';
+import dayjs from 'dayjs';
 
 const Home = props => {
   console.log('Home');
@@ -30,79 +31,91 @@ const Home = props => {
   const orderToDay = () => {
     let index = 0;
     return order?.map((r, i1) => {
-      console.log('date', new Date(r.pickup_date),new Date())
-      if (new Date(r.pickup_date) === new Date()) {
+      if (
+        // dayjs(r.pickup_date).format('DD/MM/YYYY') ===
+        // dayjs(new Date()).format('DD/MM/YYYY')
+        true
+      ) {
         index++;
         const date = r.pickup_date.split('T')[0].split('-');
+        console.log(new Date(), DateNow());
         return (
-          <TouchableOpacity
-            key={i1}
-            style={styles.cardOrder}
-            onPress={() =>
-              props.navigation.navigate('OrderDetail', {
-                order: r,
-                preRoute: 'Home',
-              })
-            }>
-            <View style={styles.indexCard}>
-              <Text style={styles.textIndex}>{index}</Text>
-            </View>
-            <View style={styles.detailCard}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: 'Kanit-Regular',
-                  color: '#000',
-                }}>
-                {r.customer.cus_name.length > 10
-                  ? r.customer.cus_name.substring(0, 13) + '****'
-                  : r.customer.cus_name}
-              </Text>
-              <Text style={{fontSize: 20}}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    color: '#4a93ed',
-                    fontFamily: 'Kanit-Regular',
-                  }}>
-                  จัดส่ง
-                </Text>
-                <Text style={{fontFamily: 'Kanit-Regular', color: '#000'}}>
-                  {'  ' + r.delivery_location}
-                </Text>
-              </Text>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Icon
-                  name="clock"
-                  size={15}
-                  color="#999"
-                  style={{marginTop: 6}}
-                />
-                <Text style={{color: '#888', padding: 5}}>
-                  {date[2] + '/' + date[1] + '/' + date[0]}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.statusCard}>
-              <Oc
-                name="dot-fill"
-                size={20}
-                color={r.status === 'จัดส่งสำเร็จ' ? '#6f6' : '#4a93ed'}
-                style={{marginTop: 5, marginRight: 5}}
-              />
-              <Text
-                style={{
-                  textAlign: 'right',
-                  marginRight: 5,
-                  marginTop: 4,
-                  fontSize: 15,
-                  fontFamily: 'Kanit-Light',
-                }}>
-                {r.status}
-              </Text>
-            </View>
-          </TouchableOpacity>
+          <View>
+            <Text>
+              {dayjs(r.pickup_date).format('DD/MM/YYYY') + '@@@' + new Date()}
+              {/* // dayjs(new Date()).format('DD/MM/YYYY')} */}
+            </Text>
+          </View>
         );
+        // return (
+        //   <TouchableOpacity
+        //     key={i1}
+        //     style={styles.cardOrder}
+        //     onPress={() =>
+        //       props.navigation.navigate('OrderDetail', {
+        //         orderDetail: r._id,
+        //         preRoute: 'Home',
+        //       })
+        //     }>
+        //     <View style={styles.indexCard}>
+        //       <Text style={styles.textIndex}>{index}</Text>
+        //     </View>
+        //     <View style={styles.detailCard}>
+        //       <Text
+        //         style={{
+        //           fontSize: 20,
+        //           fontFamily: 'Kanit-Regular',
+        //           color: '#000',
+        //         }}>
+        //         {r.customer.cus_name.length > 10
+        //           ? r.customer.cus_name.substring(0, 13) + '****'
+        //           : r.customer.cus_name}
+        //       </Text>
+        //       <Text style={{fontSize: 20}}>
+        //         <Text
+        //           style={{
+        //             fontSize: 15,
+        //             color: '#4a93ed',
+        //             fontFamily: 'Kanit-Regular',
+        //           }}>
+        //           จัดส่ง
+        //         </Text>
+        //         <Text style={{fontFamily: 'Kanit-Regular', color: '#000'}}>
+        //           {'  ' + r.delivery_location}
+        //         </Text>
+        //       </Text>
+        //       <View style={{flex: 1, flexDirection: 'row'}}>
+        //         <Icon
+        //           name="clock"
+        //           size={15}
+        //           color="#999"
+        //           style={{marginTop: 6}}
+        //         />
+        //         <Text style={{color: '#888', padding: 5}}>
+        //           {date[2] + '/' + date[1] + '/' + date[0]}
+        //         </Text>
+        //       </View>
+        //     </View>
+        //     <View style={styles.statusCard}>
+        //       <Oc
+        //         name="dot-fill"
+        //         size={20}
+        //         color={r.status === 'จัดส่งสำเร็จ' ? '#6f6' : '#4a93ed'}
+        //         style={{marginTop: 5, marginRight: 5}}
+        //       />
+        //       <Text
+        //         style={{
+        //           textAlign: 'right',
+        //           marginRight: 5,
+        //           marginTop: 4,
+        //           fontSize: 15,
+        //           fontFamily: 'Kanit-Light',
+        //         }}>
+        //         {r.status}
+        //       </Text>
+        //     </View>
+        //   </TouchableOpacity>
+        // );
       }
     });
   };

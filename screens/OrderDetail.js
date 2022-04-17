@@ -1,19 +1,22 @@
 import {View, Text, StyleSheet, ScrollView, TextInput} from 'react-native';
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Button} from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {httpClient} from '../utils/HttpClient';
 import {StoreContext} from '../store';
+import dayjs from 'dayjs';
 const OrderDetail = ({
   route: {
-    params: {order, preRoute},
+    params: {orderDetail, preRoute},
   },
   navigation,
 }) => {
   console.log('OrderDetail');
   const {
-    orderStore: {upDateOrder},
+    orderStore: {order, upDateSomeOrder},
   } = useContext(StoreContext);
+  const [newOrder, setNewOrder] = useState(null);
   const [textDetail, setTextDetail] = useState('');
+  const [loadingOrder, setLoadingOrder] = useState(true);
 
   const blockDetail = (section, value) => {
     return (
@@ -42,28 +45,55 @@ const OrderDetail = ({
     );
   };
 
-  const handleSubmit = id => {
+  const handleSubmit = (id, status) => {
     // console.log(id);
     httpClient
-      .post('http://192.168.1.20:2200/order/updatestatus', {id})
+      .post('https://api-grandlogistics.herokuapp.com/order/updatestatus', {
+        id,
+        status,
+      })
       .then(res => {
-        httpClient
-          .get('http://192.168.1.20:2200/order/mobile')
-          .then(res => {
-            upDateOrder(res.data.data);
-            navigation.goBack();
-          })
-          .catch(err => {
-            console.log(err.response);
-          });
+        console.log('res.data', res.data);
+        upDateSomeOrder(res.data);
+        // httpClient
+        //   .get('http://192.168.1.20:2200/order/mobile')
+        //   .then(res => {
+        //     upDateOrder(res.data.data);
+        //     navigation.goBack();
+        //   })
+        //   .catch(err => {
+        //     console.log(err.response);
+        //   });
       })
       .catch(err => {
         console.log(err.response);
       });
   };
 
-  const date = order.pickup_date.split('T')[0].split('-');
-  const newDate = date[2] + '/' + date[1] + '/' + date[0];
+  useEffect(() => {
+    if (preRoute !== 'Home') return;
+    if (!orderDetail || !order) return [];
+    // let resOrder = order.filter(item => {
+    //   console.log(item._id, orderDetail);
+    //   return item;
+    // });
+    let resOrder = order.find(element => element._id == orderDetail);
+    setNewOrder(resOrder);
+    setLoadingOrder(false);
+  }, [order, orderDetail]);
+
+  if (loadingOrder)
+    return (
+      <View
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        }}>
+        <Text style={{fontSize: 30}}>Loading...</Text>
+      </View>
+    );
 
   return (
     <>
@@ -73,10 +103,10 @@ const OrderDetail = ({
         }}>
         <View style={styles.container}>
           <View style={styles.containerHeader}>
-            <Text style={styles.textHeader}>{order.customer.cus_name}</Text>
+            <Text style={styles.textHeader}>{newOrder.customer.cus_name}</Text>
           </View>
-          {blockDetail('หมายเลขโทรศัพท์ลูกค้า', order.customer.phone_no)}
-          {blockDetail('สถานะงาน', order.status)}
+          {blockDetail('หมายเลขโทรศัพท์ลูกค้า', newOrder.customer.phone_no)}
+          {blockDetail('สถานะงาน', newOrder.status)}
           <View style={styles.containerTextDetail}>
             <Text
               style={{
@@ -87,7 +117,7 @@ const OrderDetail = ({
               สถานที่รับสินค้า
             </Text>
             <View style={{width: '100%', marginTop: 10}}>
-              {Object.entries(order.pickup_point).map((p, i) => {
+              {Object.entries(newOrder.pickup_point).map((p, i) => {
                 if (p[1]) {
                   return (
                     <View key={i} style={{flexDirection: 'row', padding: 7}}>
@@ -118,9 +148,12 @@ const OrderDetail = ({
               })}
             </View>
           </View>
-          {blockDetail('สถานที่ส่งสินค้า', order.delivery_location)}
-          {blockDetail('วันที่', newDate)}
-          {blockDetail('ค่าเที่ยว', order.wage)}
+          {blockDetail('สถานที่ส่งสินค้า', newOrder.delivery_location)}
+          {blockDetail(
+            'วันที่',
+            dayjs(newOrder.pickup_date).locale('th').format('DD MMMM BBBB'),
+          )}
+          {blockDetail('ค่าเที่ยว', newOrder.wage)}
           <View style={{paddingVertical: 18}}>
             <View>
               <Text
@@ -142,24 +175,90 @@ const OrderDetail = ({
             </View>
           </View>
           {preRoute === 'Home' ? (
-            <View style={{marginTop: 30, alignItems: 'center'}}>
-              <Button
-                size={25}
-                color="#fff"
-                style={{paddingHorizontal: 16, with: '40%'}}
-                backgroundColor="#0dd406"
-                onPress={() => {
-                  handleSubmit(order._id);
-                }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'Kanit-Regular',
-                    fontSize: 18,
+            <View
+              style={{
+                marginTop: 30,
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                flexDirection: 'row',
+              }}>
+              {newOrder.status != 'ปฏิเสธงาน' ? (
+                <>
+                  {newOrder.status == 'มอบหมายงานเเล้ว' ? (
+                    <Button
+                      size={25}
+                      color="#fff"
+                      style={{paddingHorizontal: 16}}
+                      backgroundColor="rgb(85,153,242)"
+                      onPress={() => {
+                        handleSubmit(newOrder._id, 'ยอมรับ');
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontFamily: 'Kanit-Regular',
+                          fontSize: 18,
+                        }}>
+                        ยอมรับงาน
+                      </Text>
+                    </Button>
+                  ) : (
+                    <Button
+                      size={25}
+                      color="#fff"
+                      style={{paddingHorizontal: 16}}
+                      backgroundColor="#0dd406"
+                      onPress={() => {
+                        handleSubmit(newOrder._id, 'ส่งงานแล้ว');
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontFamily: 'Kanit-Regular',
+                          fontSize: 18,
+                        }}>
+                        ยืนยันการส่งงาน
+                      </Text>
+                    </Button>
+                  )}
+                  <Button
+                    size={25}
+                    color="#fff"
+                    style={{paddingHorizontal: 16}}
+                    backgroundColor="rgb(254,00,00)"
+                    onPress={() => {
+                      handleSubmit(newOrder._id, 'ปฏิเสธงาน');
+                    }}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontFamily: 'Kanit-Regular',
+                        fontSize: 18,
+                      }}>
+                      ปฏิเสธงาน
+                    </Text>
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  size={25}
+                  color="#fff"
+                  style={{paddingHorizontal: 16}}
+                  backgroundColor="rgb(99,115,129)"
+                  onPress={() => {
+                    handleSubmit(newOrder._id, 'ยอมรับ');
                   }}>
-                  ยืนยันการจัดส่ง
-                </Text>
-              </Button>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontFamily: 'Kanit-Regular',
+                      fontSize: 18,
+                    }}>
+                    ยกเลิก
+                  </Text>
+                </Button>
+              )}
             </View>
           ) : null}
         </View>

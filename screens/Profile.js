@@ -10,7 +10,7 @@ import Mc, {
 import * as Keychain from 'react-native-keychain';
 
 const Profile = () => {
-  console.log('Profile');
+  console.log('Profile', new Date());
   const {
     userStore: {profile, upDateProfile},
     auth: {upDateLogin},

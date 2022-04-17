@@ -15,6 +15,12 @@ export const StoreProvider = ({children}) => {
   const orderStore = {
     order,
     upDateOrder: order => setOrder(order),
+    upDateSomeOrder: newSomeOrder => setOrder(preOrder => preOrder.map(item=>{
+      if(newSomeOrder._id == item._id){
+        return newSomeOrder
+      }
+      return item
+    }))
   };
 
   const userStore = {
