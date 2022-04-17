@@ -7,7 +7,7 @@ import Tabs from './navigation/Tab';
 import {StoreContext} from './store';
 import {httpClient} from './utils/HttpClient';
 import {Login, OrderDetail} from './screens';
-// import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 const Stack = createStackNavigator();
 
@@ -18,24 +18,24 @@ const App = () => {
     orderStore: {order, upDateOrder},
   } = useContext(StoreContext);
 
-  // useEffect(() => {
-  //   const newSocket = io('http://localhost:2200');
-  //   newSocket.emit('addUser', profile?._id);
-  //   newSocket.on('arrayValue', data => {
-  //     // console.log(data);
-  //     // upDateOrder([...order, data]);
-  //     httpClient
-  //       .get('http://192.168.1.20:2200/order/mobile')
-  //       .then(res => {
-  //         upDateOrder(res.data.data);
-  //       })
-  //       .catch(err => {
-  //         console.log(err.response);
-  //       });
-  //   });
+  useEffect(() => {
+    const newSocket = io('http://localhost:2200');
+    newSocket.emit('addUser', profile?._id);
+    newSocket.on('arrayValue', data => {
+      // console.log(data);
+      // upDateOrder([...order, data]);
+      httpClient
+        .get('http://192.168.1.20:2200/order/mobile')
+        .then(res => {
+          upDateOrder(res.data.data);
+        })
+        .catch(err => {
+          console.log(err.response);
+        });
+    });
 
-  //   return () => newSocket.close();
-  // }, [profile]);
+    return () => newSocket.close();
+  }, [profile]);
 
   useEffect(() => {
     const getProfile = () => {
@@ -54,7 +54,7 @@ const App = () => {
       httpClient
         .get('http://192.168.1.20:2200/order/mobile')
         .then(res => {
-          upDateOrder(res.data.data);
+          upDateOrder(res.data);
         })
         .catch(err => {
           console.log(err.response);

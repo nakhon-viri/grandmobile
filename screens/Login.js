@@ -25,7 +25,10 @@ const Login = () => {
   const handleLogin = value => {
     const nametoken = 'token';
     axios
-      .post('http://192.168.1.20:2200/personnel/loginmobile', value)
+      .post(
+        'https://api-grandlogistics.herokuapp.com/personnel/loginmobile',
+        value,
+      )
       .then(async res => {
         upDateProfile(res.data.user);
         await Keychain.setGenericPassword(nametoken, res.data.accessToken);
@@ -42,7 +45,7 @@ const Login = () => {
       <Text>Login Screen</Text>
       <Formik
         validationSchema={loginValidationSchema}
-        initialValues={{_uid: '6502020042', password: '12345'}}
+        initialValues={{_uid: '6501020012', password: '12345678'}}
         onSubmit={async values => {
           handleLogin(values);
         }}>

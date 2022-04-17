@@ -30,7 +30,8 @@ const Home = props => {
   const orderToDay = () => {
     let index = 0;
     return order?.map((r, i1) => {
-      if (r.pickup_date.split('T')[0] === DateNow()) {
+      console.log('date', new Date(r.pickup_date),new Date())
+      if (new Date(r.pickup_date) === new Date()) {
         index++;
         const date = r.pickup_date.split('T')[0].split('-');
         return (
