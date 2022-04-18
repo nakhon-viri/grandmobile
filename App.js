@@ -19,13 +19,13 @@ const App = () => {
   } = useContext(StoreContext);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:2200');
+    const newSocket = io('https://api-grandlogistics.herokuapp.com');
     newSocket.emit('addUser', profile?._id);
     newSocket.on('arrayValue', data => {
       // console.log(data);
       // upDateOrder([...order, data]);
       httpClient
-        .get('http://192.168.1.20:2200/order/mobile')
+        .get('https://api-grandlogistics.herokuapp.com/order/mobile')
         .then(res => {
           upDateOrder(res.data.data);
         })
@@ -40,7 +40,7 @@ const App = () => {
   useEffect(() => {
     const getProfile = () => {
       httpClient
-        .get('http://192.168.1.20:2200/personnel/me')
+        .get('https://api-grandlogistics.herokuapp.com/personnel/me')
         .then(res => {
           upDateProfile(res.data);
           upDateLogin(true);
@@ -52,7 +52,7 @@ const App = () => {
 
     const getOrder = () => {
       httpClient
-        .get('http://192.168.1.20:2200/order/mobile')
+        .get('https://api-grandlogistics.herokuapp.com/order/mobile')
         .then(res => {
           upDateOrder(res.data);
         })

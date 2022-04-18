@@ -17,6 +17,7 @@ const OrderDetail = ({
   const [newOrder, setNewOrder] = useState(null);
   const [textDetail, setTextDetail] = useState('');
   const [loadingOrder, setLoadingOrder] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const blockDetail = (section, value) => {
     return (
@@ -46,7 +47,7 @@ const OrderDetail = ({
   };
 
   const handleSubmit = (id, status) => {
-    // console.log(id);
+    setLoading(true);
     httpClient
       .post('https://api-grandlogistics.herokuapp.com/order/updatestatus', {
         id,
@@ -55,15 +56,7 @@ const OrderDetail = ({
       .then(res => {
         console.log('res.data', res.data);
         upDateSomeOrder(res.data);
-        // httpClient
-        //   .get('http://192.168.1.20:2200/order/mobile')
-        //   .then(res => {
-        //     upDateOrder(res.data.data);
-        //     navigation.goBack();
-        //   })
-        //   .catch(err => {
-        //     console.log(err.response);
-        //   });
+        setLoading(false);
       })
       .catch(err => {
         console.log(err.response);
@@ -71,12 +64,7 @@ const OrderDetail = ({
   };
 
   useEffect(() => {
-    if (preRoute !== 'Home') return;
     if (!orderDetail || !order) return [];
-    // let resOrder = order.filter(item => {
-    //   console.log(item._id, orderDetail);
-    //   return item;
-    // });
     let resOrder = order.find(element => element._id == orderDetail);
     setNewOrder(resOrder);
     setLoadingOrder(false);
@@ -183,7 +171,28 @@ const OrderDetail = ({
                 justifyContent: 'space-evenly',
                 flexDirection: 'row',
               }}>
-              {newOrder.status != 'ปฏิเสธงาน' ? (
+              {loading ? (
+                <Text style={{fontSize: 20}}>Loading...</Text>
+              ) : newOrder.status == 'ปฏิเสธงาน' ||
+                newOrder.status == 'ส่งงานเเล้ว' ? (
+                <Button
+                  size={25}
+                  color="#fff"
+                  style={{paddingHorizontal: 16}}
+                  backgroundColor="rgb(99,115,129)"
+                  onPress={() => {
+                    handleSubmit(newOrder._id, 'ยอมรับ');
+                  }}>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontFamily: 'Kanit-Regular',
+                      fontSize: 18,
+                    }}>
+                    ยกเลิก
+                  </Text>
+                </Button>
+              ) : (
                 <>
                   {newOrder.status == 'มอบหมายงานเเล้ว' ? (
                     <Button
@@ -210,7 +219,7 @@ const OrderDetail = ({
                       style={{paddingHorizontal: 16}}
                       backgroundColor="#0dd406"
                       onPress={() => {
-                        handleSubmit(newOrder._id, 'ส่งงานแล้ว');
+                        handleSubmit(newOrder._id, 'ส่งงานเเล้ว');
                       }}>
                       <Text
                         style={{
@@ -240,24 +249,6 @@ const OrderDetail = ({
                     </Text>
                   </Button>
                 </>
-              ) : (
-                <Button
-                  size={25}
-                  color="#fff"
-                  style={{paddingHorizontal: 16}}
-                  backgroundColor="rgb(99,115,129)"
-                  onPress={() => {
-                    handleSubmit(newOrder._id, 'ยอมรับ');
-                  }}>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontFamily: 'Kanit-Regular',
-                      fontSize: 18,
-                    }}>
-                    ยกเลิก
-                  </Text>
-                </Button>
               )}
             </View>
           ) : null}

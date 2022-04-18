@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {StoreContext} from '../store';
 import Oc from 'react-native-vector-icons/dist/Octicons';
+import dayjs from 'dayjs';
 const Order = ({navigation}) => {
   console.log('Order');
   const {
@@ -30,14 +31,13 @@ const Order = ({navigation}) => {
           </Text>
         </View>
         {orderData?.map((r, i) => {
-          const date = r.pickup_date.split('T')[0].split('-');
           return (
             <TouchableOpacity
               key={i}
               style={styles.listOrder}
               onPress={() =>
                 navigation.navigate('OrderDetail', {
-                  order: r,
+                  orderDetail: r._id,
                   preRoute: 'history',
                 })
               }>
@@ -49,14 +49,17 @@ const Order = ({navigation}) => {
                     marginTop: 4,
                     color: '#000',
                   }}>
-                  {date[2] + '/' + date[1] + '/' + date[0]}
+                  {dayjs(r.pickup_date).format('DD/MM/YYYY')}
                 </Text>
               </View>
               <View style={styles.detailList}>
-                <Text style={styles.textList}>
-                  {r.customer.cus_name.length > 10
-                    ? r.customer.cus_name.substring(0, 13) + '****'
-                    : r.customer.cus_name}
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    ...styles.textList,
+                    width: 130,
+                  }}>
+                  {r.customer.cus_name}
                 </Text>
                 <Text style={styles.textList}>
                   <Text style={styles.state1}>จัดส่ง</Text>
