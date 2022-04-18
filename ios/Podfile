@@ -12,6 +12,8 @@ target 'grandmobile' do
     :hermes_enabled => false
   )
 
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
   target 'grandmobileTests' do
     inherit! :complete
     # Pods for testing

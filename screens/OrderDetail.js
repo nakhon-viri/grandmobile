@@ -4,6 +4,8 @@ import {Button} from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {httpClient} from '../utils/HttpClient';
 import {StoreContext} from '../store';
 import dayjs from 'dayjs';
+import ImagePicker from 'react-native-image-crop-picker';
+
 const OrderDetail = ({
   route: {
     params: {orderDetail, preRoute},
@@ -61,6 +63,26 @@ const OrderDetail = ({
       .catch(err => {
         console.log(err.response);
       });
+  };
+
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+    });
+  };
+
+  const openPicker = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+    });
   };
 
   useEffect(() => {
@@ -161,6 +183,45 @@ const OrderDetail = ({
                 style={{borderWidth: 0.3, height: 100, borderRadius: 3}}
               />
             </View>
+          </View>
+          <View
+            style={{
+              marginTop: 30,
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-evenly',
+              flexDirection: 'row',
+            }}>
+            <Button
+              size={25}
+              color="#fff"
+              style={{paddingHorizontal: 16}}
+              backgroundColor="#00f"
+              onPress={openPicker}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontFamily: 'Kanit-Regular',
+                  fontSize: 18,
+                }}>
+                คลัง
+              </Text>
+            </Button>
+            <Button
+              size={25}
+              color="#fff"
+              style={{paddingHorizontal: 16}}
+              backgroundColor="#00f"
+              onPress={openCamera}>
+              <Text
+                style={{
+                  color: '#fff',
+                  fontFamily: 'Kanit-Regular',
+                  fontSize: 18,
+                }}>
+                กล้อง
+              </Text>
+            </Button>
           </View>
           {preRoute === 'Home' ? (
             <View
