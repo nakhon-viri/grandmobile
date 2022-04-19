@@ -25,7 +25,6 @@ const Home = props => {
         dayjs(new Date()).format('DD/MM/YYYY')
       ) {
         index++;
-        const date = r.pickup_date.split('T')[0].split('-');
         return (
           <TouchableOpacity
             key={i1}
@@ -69,7 +68,7 @@ const Home = props => {
                   style={{marginTop: 6}}
                 />
                 <Text style={{color: '#888', padding: 5}}>
-                  {date[2] + '/' + date[1] + '/' + date[0]}
+                  {dayjs(r.pickup_date).locale('th').format('DD MMMM BBBB')}
                 </Text>
               </View>
             </View>

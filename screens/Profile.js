@@ -8,6 +8,7 @@ import Mc, {
   Button,
 } from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import * as Keychain from 'react-native-keychain';
+import dayjs from 'dayjs';
 
 const Profile = () => {
   console.log('Profile', new Date());
@@ -35,8 +36,6 @@ const Profile = () => {
     upDateProfile(null);
     upDateLogin(false);
   };
-
-  const date = profile?.birthday.split('T')[0].split('-') || ['', '', ''];
 
   return (
     <ScrollView>
@@ -77,10 +76,14 @@ const Profile = () => {
             <Pd>เลขที่ประจำตัวประชาชน : {profile?.reference_id}</Pd>
             <Pd>เพศ : {profile?.gender}</Pd>
             <Pd>
-              วัน/เดือน/ปีเกิด : {date[2] + '/' + date[1] + '/' + date[0]}
+              วัน/เดือน/ปีเกิด :{' '}
+              {dayjs(profile?.birthday).locale('th').format('DD MMMM BBBB')}
             </Pd>
             <Text style={{paddingTop: 10, color: '#4b5257'}}>
-              อายุ : {new Date().getFullYear() - date[0]} ปี
+              อายุ :{' '}
+              {dayjs(new Date()).format('BBBB') -
+                dayjs(profile?.birthday).format('BBBB')}{' '}
+              ปี
             </Text>
           </View>
         </View>

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import React, {useContext} from 'react';
 import {StoreContext} from '../store';
+import dayjs from 'dayjs';
 
 const Financial = () => {
   const {
@@ -29,16 +30,14 @@ const Financial = () => {
   const wageList = () => {
     return order?.map((r, i) => {
       if (r.pickup_date.split('T')[0].substring(0, 7) === DateNow()) {
-        const date = r.pickup_date.split('T')[0].split('-');
         return (
           <TouchableOpacity
             style={order.length - 1 == i ? styles.listLast : styles.list}
             key={i}>
             <View style={styles.date}>
-              <Text
-                style={
-                  styles.dateText
-                }>{`${date[2]}/${date[1]}/${date[0]}`}</Text>
+              <Text style={styles.dateText}>{`${dayjs(r.pickup_date)
+                .locale('th')
+                .format('DD MMMM BBBB')}`}</Text>
             </View>
             <View style={styles.section}>
               <Text style={styles.sectionText}>

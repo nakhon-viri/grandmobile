@@ -14,8 +14,8 @@ const Stack = createStackNavigator();
 const App = () => {
   const {
     auth: {isLogin, upDateLogin},
-    userStore: {profile, upDateProfile},
-    orderStore: {order, upDateOrder},
+    userStore: {profile, upDateProfile, loadingProfile, upDateLoadingProfile},
+    orderStore: {order, upDateOrder, loadingOrder, upDateLoadingOrder},
   } = useContext(StoreContext);
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const App = () => {
         .then(res => {
           upDateProfile(res.data);
           upDateLogin(true);
+          upDateLoadingProfile(true);
         })
         .catch(err => {
           console.log(err.response);
@@ -55,6 +56,7 @@ const App = () => {
         .get('https://api-grandlogistics.herokuapp.com/order/mobile')
         .then(res => {
           upDateOrder(res.data);
+          upDateLoadingOrder(true);
         })
         .catch(err => {
           console.log(err.response);
@@ -71,11 +73,15 @@ const App = () => {
         upDateOrder(null);
         upDateProfile(null);
       }
+      if (!credentials) {
+        SplashScreen.hide();
+      } else if (credentials && (loadingProfile || loadingOrder) && isLogin) {
+        SplashScreen.hide();
+      }
     };
 
     getData();
-    SplashScreen.hide();
-  }, []);
+  }, [loadingProfile, loadingOrder, isLogin]);
 
   return (
     <NavigationContainer>
@@ -108,7 +114,13 @@ const App = () => {
             />
           </>
         ) : (
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }}
+          />
         )}
       </Stack.Navigator>
     </NavigationContainer>

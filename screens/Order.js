@@ -49,7 +49,7 @@ const Order = ({navigation}) => {
                     marginTop: 4,
                     color: '#000',
                   }}>
-                  {dayjs(r.pickup_date).format('DD/MM/YYYY')}
+                  {dayjs(r.pickup_date).format('DD/MM/BBBB')}
                 </Text>
               </View>
               <View style={styles.detailList}>
