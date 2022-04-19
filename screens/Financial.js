@@ -15,21 +15,12 @@ const Financial = () => {
     orderStore: {order},
   } = useContext(StoreContext);
 
-  const DateNow = () => {
-    var today = new Date();
-    var mm = String(
-      Platform.OS === 'ios' ? today.getMonth() + 1 : today.getMonth() + 2,
-    ).padStart(2, '0');
-    var yyyy = today.getFullYear();
-
-    today = yyyy + '-' + mm;
-
-    return today;
-  };
-
   const wageList = () => {
     return order?.map((r, i) => {
-      if (r.pickup_date.split('T')[0].substring(0, 7) === DateNow()) {
+      if (
+        dayjs(r.pickup_date).format('MM YYYY') ===
+        dayjs(new Date()).format('MM YYYY')
+      ) {
         return (
           <TouchableOpacity
             style={order.length - 1 == i ? styles.listLast : styles.list}
@@ -79,7 +70,10 @@ const Financial = () => {
   const calculate = arr => {
     let calCost = 0;
     for (const r of arr) {
-      if (r.pickup_date.split('T')[0].substring(0, 7) === DateNow()) {
+      if (
+        dayjs(r.pickup_date).format('MM YYYY') ===
+        dayjs(new Date()).format('MM YYYY')
+      ) {
         calCost += r.wage;
       }
     }

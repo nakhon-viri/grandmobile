@@ -140,7 +140,11 @@ const Login = () => {
             )}
             <TouchableOpacity
               onPress={handleSubmit}
-              style={{marginTop: 30}}
+              style={{
+                marginTop: 30,
+                padding: 10,
+                width: 120,
+              }}
               disabled={!isValid || loading}>
               {/* disabled={!(isValid && dirty)}> */}
               <Text
@@ -148,6 +152,7 @@ const Login = () => {
                   // color: !(isValid && dirty) ? '#bfbfbf' : '#007bff',
                   color: !isValid || loading ? '#bfbfbf' : '#007bff',
                   fontSize: 20,
+                  textAlign: 'center',
                 }}>
                 {loading ? 'Loading...' : 'LOGIN'}
               </Text>

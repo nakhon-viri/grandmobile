@@ -4,7 +4,6 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
-  Button,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -325,29 +324,31 @@ const OrderDetail = ({
                 <Text style={{fontSize: 20}}>Loading...</Text>
               ) : newOrder.status == 'ปฏิเสธงาน' ||
                 newOrder.status == 'ส่งงานเเล้ว' ? (
-                <Button
-                  size={25}
-                  color="#fff"
-                  style={{paddingHorizontal: 16}}
-                  backgroundColor="rgb(99,115,129)"
+                <TouchableOpacity
+                  style={{
+                    ...styles.loginScreenButton,
+                    backgroundColor: 'rgb(99,115,129)',
+                  }}
                   onPress={() => {
                     handleSubmit(newOrder._id, 'ยอมรับ');
                   }}
-                  title="ยกเลิก"
-                />
+                  underlayColor="#fff">
+                  <Text style={styles.loginText}>ยกเลิก</Text>
+                </TouchableOpacity>
               ) : (
                 <>
                   {newOrder.status == 'มอบหมายงานเเล้ว' ? (
-                    <Button
-                      size={25}
-                      color="#fff"
-                      style={{paddingHorizontal: 16, borderRadius: 20}}
-                      backgroundColor="rgb(85,153,242)"
-                      title="ยอมรับงาน"
+                    <TouchableOpacity
+                      style={{
+                        ...styles.loginScreenButton,
+                        backgroundColor: 'rgb(85,153,242)',
+                      }}
                       onPress={() => {
                         handleSubmit(newOrder._id, 'ยอมรับ');
                       }}
-                    />
+                      underlayColor="#fff">
+                      <Text style={styles.loginText}>ยอมรับงาน</Text>
+                    </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
                       style={{

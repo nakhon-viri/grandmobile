@@ -10,7 +10,7 @@ import {StoreContext} from '../store';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Oc from 'react-native-vector-icons/dist/Octicons';
 import dayjs from 'dayjs';
-import * as Keychain from 'react-native-keychain';
+import colorStatus from '../utils/ColorStatus';
 
 const Home = props => {
   const {
@@ -76,7 +76,7 @@ const Home = props => {
               <Oc
                 name="dot-fill"
                 size={20}
-                color={r.status === 'จัดส่งสำเร็จ' ? '#6f6' : '#4a93ed'}
+                color={colorStatus(r.status)}
                 style={{marginTop: 5, marginRight: 5}}
               />
               <Text

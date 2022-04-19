@@ -9,6 +9,7 @@ import {
 import {StoreContext} from '../store';
 import Oc from 'react-native-vector-icons/dist/Octicons';
 import dayjs from 'dayjs';
+import colorStatus from '../utils/ColorStatus';
 const Order = ({navigation}) => {
   console.log('Order');
   const {
@@ -77,7 +78,7 @@ const Order = ({navigation}) => {
                 <Oc
                   name="dot-fill"
                   size={20}
-                  color={r.status === 'จัดส่งสำเร็จ' ? '#6f6' : '#4a93ed'}
+                  color={colorStatus(r.status)}
                   style={{marginTop: 5, marginRight: 5}}
                 />
                 <Text
