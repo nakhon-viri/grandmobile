@@ -8,10 +8,16 @@ export const StoreProvider = ({children}) => {
   const [loadingOrder, setLoadingOrder] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [order, setOrder] = useState(null);
+  const [socket, setSocket] = useState(null);
 
   const auth = {
     isLogin,
     upDateLogin: is => setIsLogin(is),
+  };
+
+  const socketStore = {
+    socket,
+    upDateSocket: v => setSocket(v),
   };
 
   const orderStore = {
@@ -38,7 +44,7 @@ export const StoreProvider = ({children}) => {
   };
 
   return (
-    <StoreContext.Provider value={{auth, userStore, orderStore}}>
+    <StoreContext.Provider value={{auth, userStore, orderStore, socketStore}}>
       {children}
     </StoreContext.Provider>
   );

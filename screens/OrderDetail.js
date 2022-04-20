@@ -95,7 +95,7 @@ const OrderDetail = ({
       }
     });
   };
-
+  console.log(newOrder.path_image);
   const openPicker = () => {
     ImagePicker.openPicker({
       width: 300,
@@ -290,7 +290,7 @@ const OrderDetail = ({
               )}
             </View>
           ) : null}
-          {newOrder.path_image ? (
+          {newOrder.path_image != 'nopic_item.png' ? (
             <View style={{marginTop: 30}}>
               <Image
                 style={{height: 300}}

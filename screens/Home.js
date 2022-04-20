@@ -20,6 +20,12 @@ const Home = props => {
   const orderToDay = () => {
     let index = 0;
     return order?.map((r, i1) => {
+      // console.log(
+      //   'DATE',
+      //   dayjs(r.pickup_date).format('DD/MM/YYYY'),
+      //   dayjs(new Date()).format('DD/MM/YYYY'),
+      //   new Date(),
+      // );
       if (
         dayjs(r.pickup_date).format('DD/MM/YYYY') ===
         dayjs(new Date()).format('DD/MM/YYYY')

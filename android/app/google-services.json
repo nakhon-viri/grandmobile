@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "89491233718",
+    "project_id": "pushnotificationgrandlogistics",
+    "storage_bucket": "pushnotificationgrandlogistics.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89491233718:android:38f88b09c32f8ccee33f17",
+        "android_client_info": {
+          "package_name": "com.grandmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89491233718-8tq3en9nnfothro65vs39j94q2l6rrai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBm22L5_iSLBRJltvA7DDfjbNjEcKlHzZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89491233718-8tq3en9nnfothro65vs39j94q2l6rrai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
